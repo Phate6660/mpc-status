@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 mpd = "0.0.12"
+sedregex = "0.2.4"

@@ -1,4 +1,5 @@
 use mpd::{Client, Song, State, Status};
+use sedregex::find_and_replace;
 use std::fmt;
 
 struct PlayState {
@@ -23,6 +24,7 @@ fn main() {
     let status: Status = c.status().unwrap();
     let song: Song = c.currentsong().unwrap().unwrap();
     let na = "N/A".to_string();
+    let gen = song.tags.get("Genre").unwrap_or(&na);
     let art = song.tags.get("Artist").unwrap_or(&na);
     let alb = song.tags.get("Album").unwrap_or(&na);
     let tit = song.title.as_ref().unwrap();
@@ -31,6 +33,7 @@ fn main() {
     let dur = status.duration.unwrap().num_seconds();
     let duration = format_time(dur);
     let stat = status.state;
-    let state = PlayState { sta: stat };
-    println!("{} - {} - {} -- [{}] -- [{}/{}]", art, alb, tit, state, elapsed, duration);
+    let state = PlayState { sta: stat }.to_string();
+    let state = find_and_replace(&state, &["s/Play/Playing/g", "s/Pause/Paused/g"]).unwrap();
+    println!("{} - {} - {} - {} -- {} -- [{}/{}]", gen, art, alb, tit, state, elapsed, duration);
 }
