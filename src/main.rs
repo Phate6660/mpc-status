@@ -28,6 +28,7 @@ fn main() {
     let art = song.tags.get("Artist").unwrap_or(&na);
     let alb = song.tags.get("Album").unwrap_or(&na);
     let tit = song.title.as_ref().unwrap();
+    let dat = song.tags.get("Date").unwrap_or(&na);
     let elap = status.elapsed.unwrap().num_seconds();
     let elapsed = format_time(elap);
     let dur = status.duration.unwrap().num_seconds();
@@ -35,5 +36,5 @@ fn main() {
     let stat = status.state;
     let state = PlayState { sta: stat }.to_string();
     let state = find_and_replace(&state, &["s/Play/Playing/g", "s/Pause/Paused/g"]).unwrap();
-    println!("{} - {} - {} - {} -- {} -- [{}/{}]", gen, art, alb, tit, state, elapsed, duration);
+    println!("{} - {} - {} ({}) - {} -- {} -- [{}/{}]", gen, art, alb, dat, tit, state, elapsed, duration);
 }
